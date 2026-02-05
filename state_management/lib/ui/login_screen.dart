@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    if (email == "admin" && password == "123456") {
+    if (email == "admin" && password == "123") {
       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
