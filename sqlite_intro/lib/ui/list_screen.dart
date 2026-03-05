@@ -48,7 +48,7 @@ class _ListScreenState extends ConsumerState<ListScreen> {
                     return ListTile(
                       title: Text(note.title),
                       subtitle: Text(note.content),
-                      trailing: IconButton(
+                      trailing: Row IconButton(
                         onPressed: () {
                           ref.read(noteProvider.notifier).deleteNote(note.id!);
                         },
