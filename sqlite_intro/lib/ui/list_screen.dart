@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqlite_intro/ui/add_note_screen.dart';
 
 import '../models/note.dart';
 import '../providers/note_notifier.dart';
+import 'edit_note_screen.dart';
 
 class ListScreen extends ConsumerStatefulWidget {
   const ListScreen({super.key});
@@ -26,11 +28,15 @@ class _ListScreenState extends ConsumerState<ListScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // ref.read(noteProvider.notifier).addNote('Note', 'Hello');
-          ref
-              .read(noteProvider.notifier)
-              .createNote(
-                Note(title: 'Note Test', content: 'Content of the note'),
-              );
+          // ref
+          //     .read(noteProvider.notifier)
+          //     .createNote(
+          //       Note(title: 'Note Test', content: 'Content of the note'),
+          //     );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => AddNoteScreen()),
+          );
         },
         child: Icon(Icons.add),
       ),
@@ -48,11 +54,29 @@ class _ListScreenState extends ConsumerState<ListScreen> {
                     return ListTile(
                       title: Text(note.title),
                       subtitle: Text(note.content),
-                      trailing: Row IconButton(
-                        onPressed: () {
-                          ref.read(noteProvider.notifier).deleteNote(note.id!);
-                        },
-                        icon: Icon(Icons.delete),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min, // mainAxis = truc ngang, mainAxisSize = width
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => EditNoteScreen(),
+                                ),
+                              );
+                            },
+                            icon: Icon(Icons.edit),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              ref
+                                  .read(noteProvider.notifier)
+                                  .deleteNote(note.id!);
+                            },
+                            icon: Icon(Icons.delete),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -64,3 +88,18 @@ class _ListScreenState extends ConsumerState<ListScreen> {
     );
   }
 }
+
+// Classwork
+// 1) Điều chỉnh lại: Thêm giao diện (Form) hỗ trợ thêm mới 1 note Add new note
+//   - Field: Title, Content. (nếu dùng controller thì nhớ dispose)
+//   - Button: Để submit form. Submit sẽ save note vào DB và quay về màn hình List
+//   - Form: Validate Title ít nhất 3 ký tự, content ít nhất 10 ký tự.
+// 2) Điều chỉnh sự kiện press của nút Floating để route qua màn hình Add new note
+// 3.1) Thêm Edit btn cho ListTile (cạnh Delete btn)
+//   - Route user về màn hình Edit note (tao them
+//   - Logic (validation, flow...) Tương tự màn hình Add note.
+// 3.2) Tạo edit note screen có form giống với create, tự load data và fill sẵn
+//   vào fields
+//   - Get note by id (viết db helper và notifer)
+//   - Edit note (viết db helper và notifer)
+//
